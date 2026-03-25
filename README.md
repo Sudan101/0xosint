@@ -45,8 +45,8 @@ A Python-based OSINT (Open Source Intelligence) domain reconnaissance tool. Poin
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/osint-recon-tool.git
-cd osint-recon-tool
+git clone https://github.com/Sudan101/0xosint.git
+cd 0xosint
 ```
 
 ### 2. Create a Virtual Environment (Recommended)
@@ -252,7 +252,4 @@ Built with:
 - [dnspython](https://www.dnspython.org/) — DNS toolkit
 - [Shodan](https://shodan.io) — Internet intelligence
 - [Hunter.io](https://hunter.io) — Email discovery
-# 0xosint
-# 0xosint
-# 0xosint
-# 0xosint
+
