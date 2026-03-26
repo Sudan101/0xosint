@@ -104,7 +104,7 @@ IPINFO_API_KEY=your_key_here
 ### Run all modules
 
 ```bash
-python main.py example.com --all
+python 0xosint.py example.com --all
 ```
 
 ### Run specific modules
