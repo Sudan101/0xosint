@@ -4,6 +4,7 @@ import shutil
 import json
 import os
 from config import Config
+from modules import nuclei_waf
 from rich.console import Console
 from rich.table import Table
 
@@ -255,6 +256,14 @@ def run(domain: str) -> dict:
     # --- HTTPX 2-Pass Probing ---
     httpx_results = run_httpx(subs, domain)
     results["httpx"] = httpx_results
+
+    # --- Nuclei WAF Detection on live hosts ---
+    if httpx_results:
+        live_urls = [h["url"] for h in httpx_results if h.get("url")]
+        waf_results = nuclei_waf.run(live_urls, domain)
+        results["waf"] = waf_results
+    else:
+        results["waf"] = []
 
     # --- Domain Info ---
     info = get_domain_info(domain)

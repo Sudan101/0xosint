@@ -118,6 +118,38 @@ def generate_html(domain: str, data: dict) -> str:
             )
             sections_html += section(f"🌐 HTTPX Live Hosts ({len(httpx_results)} alive)", httpx_table)
 
+    # WAF Detection
+    waf = data.get("securitytrails", {}).get("waf", [])
+    if waf:
+        waf_detected = [w for w in waf if w.get("detected")]
+        waf_clean    = [w for w in waf if not w.get("detected")]
+        rows = ""
+        for w in waf_detected:
+            rows += (
+                f"<tr>"
+                f"<td><a href='{w['host']}' target='_blank' style='color:#58a6ff'>{w['host']}</a></td>"
+                f"<td><span style='color:#f85149;font-weight:bold'>⚠️ {w['waf']}</span></td>"
+                f"<td><span style='color:#f85149'>WAF DETECTED</span></td>"
+                f"</tr>"
+            )
+        for w in waf_clean[:20]:
+            rows += (
+                f"<tr>"
+                f"<td><a href='{w['host']}' target='_blank' style='color:#58a6ff'>{w['host']}</a></td>"
+                f"<td><span style='color:#3fb950'>None</span></td>"
+                f"<td><span style='color:#3fb950'>✅ No WAF</span></td>"
+                f"</tr>"
+            )
+        waf_table = (
+            f"<p style='color:#8b949e;margin-bottom:10px'>"
+            f"⚠️ <strong style='color:#f85149'>{len(waf_detected)}</strong> WAF(s) detected &nbsp;|&nbsp; "
+            f"✅ <strong style='color:#3fb950'>{len(waf_clean)}</strong> host(s) with no WAF"
+            f"</p>"
+            f"<table><thead><tr><th>Host</th><th>WAF</th><th>Status</th></tr></thead>"
+            f"<tbody>{rows}</tbody></table>"
+        )
+        sections_html += section(f"🛡️ WAF Detection ({len(waf_detected)} detected)", waf_table)
+
     # Ports
     ports = data.get("ports", {})
     if ports:
