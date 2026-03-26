@@ -66,7 +66,6 @@ pip install -r requirements.txt
 ### 4. Configure API Keys
 
 ```bash
-cp .env.example .env
 nano .env   # or use any text editor
 ```
 
@@ -110,24 +109,24 @@ python 0xosint.py example.com --all
 ### Run specific modules
 
 ```bash
-python main.py example.com --dns --whois --ssl
-python main.py example.com --st --ports --tech
-python main.py example.com --emails --shodan --vt
+python 0xosint.py example.com --dns --whois --ssl
+python 0xosint.py example.com --st --ports --tech
+python 0xosint.py example.com --emails --shodan --vt
 ```
 
 ### Choose report format
 
 ```bash
-python main.py example.com --all --report html    # HTML report (default)
-python main.py example.com --all --report json    # JSON report
-python main.py example.com --all --report both    # Both formats
-python main.py example.com --all --no-report      # No report
+python 0xosint.py example.com --all --report html    # HTML report (default)
+python 0xosint.py example.com --all --report json    # JSON report
+python 0xosint.py example.com --all --report both    # Both formats
+python 0xosint.py example.com --all --no-report      # No report
 ```
 
 ### Full help
 
 ```bash
-python main.py --help
+python 0xosint.py --help
 ```
 
 ---
@@ -206,13 +205,13 @@ The **HTML report** includes:
 
 ```bash
 # Test with a domain you own
-python main.py yourdomain.com --dns --whois --ssl
+python 0xosint.py yourdomain.com --dns --whois --ssl
 ```
 
 ### Add a new module
 
 1. Create `modules/your_module.py` with a `run(domain) -> dict` function
-2. Import it in `main.py`
+2. Import it in `0xosint.py`
 3. Add a CLI flag with `argparse`
 4. Add results to the `results` dict
 5. Add a section in `reports/report_generator.py`
@@ -253,3 +252,4 @@ Built with:
 - [Shodan](https://shodan.io) — Internet intelligence
 - [Hunter.io](https://hunter.io) — Email discovery
 
+HanyObied => 0xsudan@gmail.com
