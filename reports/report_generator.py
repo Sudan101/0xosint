@@ -86,6 +86,38 @@ def generate_html(domain: str, data: dict) -> str:
             hist_table = f"<table><thead><tr><th>IP</th><th>First Seen</th><th>Last Seen</th></tr></thead><tbody>{rows}</tbody></table>"
             sections_html += section("📅 DNS History", hist_table)
 
+        # HTTPX Results
+        httpx_results = st.get("httpx", [])
+        if httpx_results:
+            rows = ""
+            for h in httpx_results:
+                sc = str(h.get("status_code", ""))
+                if sc.startswith("2"):   sc_style = "color:#3fb950;font-weight:bold"
+                elif sc.startswith("3"): sc_style = "color:#d29922;font-weight:bold"
+                elif sc.startswith("4"): sc_style = "color:#f85149;font-weight:bold"
+                elif sc.startswith("5"): sc_style = "color:#ff6e6e;font-weight:bold"
+                else:                    sc_style = ""
+                url   = h.get("url","")
+                rows += (
+                    f"<tr>"
+                    f"<td><a href='{url}' target='_blank' style='color:#58a6ff'>{url}</a></td>"
+                    f"<td><span style='{sc_style}'>{sc}</span></td>"
+                    f"<td>{h.get('ip','')}</td>"
+                    f"<td>{h.get('title','')}</td>"
+                    f"<td>{h.get('server','')}</td>"
+                    f"<td>{h.get('tech','')}</td>"
+                    f"</tr>"
+                )
+            httpx_table = (
+                f"<p style='color:#8b949e;margin-bottom:10px'>"
+                f"✅ <strong style='color:#3fb950'>{len(httpx_results)}</strong> live hosts discovered"
+                f"</p>"
+                f"<table><thead><tr>"
+                f"<th>URL</th><th>Status</th><th>IP</th><th>Title</th><th>Server</th><th>Tech</th>"
+                f"</tr></thead><tbody>{rows}</tbody></table>"
+            )
+            sections_html += section(f"🌐 HTTPX Live Hosts ({len(httpx_results)} alive)", httpx_table)
+
     # Ports
     ports = data.get("ports", {})
     if ports:
@@ -116,7 +148,7 @@ def generate_html(domain: str, data: dict) -> str:
     # Shodan
     shodan = data.get("shodan", {})
     if shodan:
-        shodan_display = {k: ", ".join(v) if isinstance(v, list) else str(v) for k, v in shodan.items()}
+        shodan_display = {k: ", ".join(str(i) for i in v) if isinstance(v, list) else str(v) for k, v in shodan.items()}
         sections_html += section("👁️ Shodan Intelligence", dict_to_table(shodan_display))
 
     # Geolocation
@@ -250,3 +282,4 @@ def generate(domain: str, data: dict, fmt: str = "html") -> str:
         return generate_html(domain, data)
     else:
         return generate_html(domain, data)
+
